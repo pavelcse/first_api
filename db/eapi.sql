@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2018 at 10:51 PM
+-- Generation Time: Jun 06, 2018 at 12:28 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -42,7 +42,119 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2018_06_05_193911_create_products_table', 1),
-(4, '2018_06_05_194005_create_reviews_table', 1);
+(4, '2018_06_05_194005_create_reviews_table', 1),
+(5, '2016_06_01_000001_create_oauth_auth_codes_table', 2),
+(6, '2016_06_01_000002_create_oauth_access_tokens_table', 2),
+(7, '2016_06_01_000003_create_oauth_refresh_tokens_table', 2),
+(8, '2016_06_01_000004_create_oauth_clients_table', 2),
+(9, '2016_06_01_000005_create_oauth_personal_access_clients_table', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_access_tokens`
+--
+
+CREATE TABLE `oauth_access_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `client_id` int(11) NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_access_tokens`
+--
+
+INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
+('b9e8d788e1c9c626d42d5bc45eec4db03faf232831e7d4ea67ce0539394696010683847f5fa85b7c', 1, 2, NULL, '[]', 0, '2018-06-06 04:18:03', '2018-06-06 04:18:03', '2019-06-06 10:18:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_auth_codes`
+--
+
+CREATE TABLE `oauth_auth_codes` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_clients`
+--
+
+CREATE TABLE `oauth_clients` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `personal_access_client` tinyint(1) NOT NULL,
+  `password_client` tinyint(1) NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_clients`
+--
+
+INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Laravel Personal Access Client', 'emyl2oupY0U6A11p6tULgzmXjHWh2vRBztmKjFoQ', 'http://localhost', 1, 0, 0, '2018-06-06 03:56:40', '2018-06-06 03:56:40'),
+(2, NULL, 'Laravel Password Grant Client', 's0k3CFzJB3CMwYYvk5VOwIhWEfl0WCYxa1Y4MmC4', 'http://localhost', 0, 1, 0, '2018-06-06 03:56:41', '2018-06-06 03:56:41');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_personal_access_clients`
+--
+
+CREATE TABLE `oauth_personal_access_clients` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_personal_access_clients`
+--
+
+INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
+(1, 1, '2018-06-06 03:56:40', '2018-06-06 03:56:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `oauth_refresh_tokens`
+--
+
+CREATE TABLE `oauth_refresh_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `oauth_refresh_tokens`
+--
+
+INSERT INTO `oauth_refresh_tokens` (`id`, `access_token_id`, `revoked`, `expires_at`) VALUES
+('8667be2c2b747d3d7dcf175f71b9cfbbb88b3b6ca8ef59d2f11cf50956ccc1a56662a2227e75a41b', 'b9e8d788e1c9c626d42d5bc45eec4db03faf232831e7d4ea67ce0539394696010683847f5fa85b7c', 0, '2019-06-06 10:18:03');
 
 -- --------------------------------------------------------
 
@@ -469,6 +581,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Parvez Pavel', 'parvez@example.com', '$2y$10$mokg/S3eHOYJZhZkTcs3u.x/Tnj0vnVtrzO4qEC9sEvbO1P3UXSB2', NULL, '2018-06-06 04:13:59', '2018-06-06 04:13:59');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -477,6 +596,40 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `oauth_access_tokens`
+--
+ALTER TABLE `oauth_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_access_tokens_user_id_index` (`user_id`);
+
+--
+-- Indexes for table `oauth_auth_codes`
+--
+ALTER TABLE `oauth_auth_codes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `oauth_clients`
+--
+ALTER TABLE `oauth_clients`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_clients_user_id_index` (`user_id`);
+
+--
+-- Indexes for table `oauth_personal_access_clients`
+--
+ALTER TABLE `oauth_personal_access_clients`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_personal_access_clients_client_id_index` (`client_id`);
+
+--
+-- Indexes for table `oauth_refresh_tokens`
+--
+ALTER TABLE `oauth_refresh_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
 
 --
 -- Indexes for table `password_resets`
@@ -512,7 +665,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `oauth_clients`
+--
+ALTER TABLE `oauth_clients`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `oauth_personal_access_clients`
+--
+ALTER TABLE `oauth_personal_access_clients`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -530,7 +695,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
